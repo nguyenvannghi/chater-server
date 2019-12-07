@@ -1,0 +1,18 @@
+{
+    "version": 2,
+    "builds": [
+        {
+            "src": "index.js",
+            "use": "@now/node-server"
+        }
+    ],
+    "routes": [
+        {
+            "src": "/.*",
+            "dest": "index.js"
+        }
+    ],
+    "env": {
+        "VERSION": "2.0.0"
+    }
+}

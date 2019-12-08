@@ -1,18 +1,28 @@
 const express = require('express');
 const { ApolloServer } = require('apollo-server-express');
 const http = require('http');
+const cors = require('cors');
+const cookieParser = require('cookie-parser');
 const { PORT } = require('./configs');
 const { contextGuard } = require('./auth/context-guard');
 const { schema } = require('./graphql');
 
 const app = express();
+const corsOptions = {
+    origin: '*',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true, // <-- REQUIRED backend setting
+};
+
+app.use(cors(corsOptions));
+app.use(cookieParser());
 const server = new ApolloServer({
     schema,
     introspection: true,
     playground: true,
     context: contextGuard,
 });
-server.applyMiddleware({ app, path: '/' });
+server.applyMiddleware({ app, path: '/', cors: corsOptions });
 
 const httpServer = http.createServer(app);
 server.installSubscriptionHandlers(httpServer);

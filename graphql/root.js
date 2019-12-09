@@ -8,6 +8,9 @@ const RootTypeDef = `
   }
   type Subscription {
     _typename: String
+  } 
+  input Where {
+    _typename: String
   }
 `;
 

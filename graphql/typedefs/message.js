@@ -16,7 +16,7 @@ const MessageTypeDefs = gql`
         addMessage(user_id: UserInput!, room_id: RoomInput!, message_body: String, message_status: Boolean, created_by: UserInput): Message
         updateMessage(_id: String!, message_body: String, message_status: Boolean, updated_by: UserInput): Message
     }
-    input Where {
+    extend input Where {
         room: String
     }
 `;

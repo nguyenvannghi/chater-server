@@ -1,8 +1,8 @@
 const { isEmpty } = require('lodash');
 const RoomModel = require('../db/room');
 
-const GET_ROOMS = async (_root, _args) => {
-    return await RoomModel.find({})
+const GET_ROOMS = async (_root, args) => {
+    return await RoomModel.find(args.where)
         .populate('users')
         .populate('created_by')
         .populate('updated_by')

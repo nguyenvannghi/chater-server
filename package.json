@@ -20,7 +20,8 @@
         "jsonwebtoken": "^8.5.1",
         "lodash": "^4.17.15",
         "mongoose": "^5.7.13",
-        "socket.io": "^2.3.0"
+        "socket.io": "^2.3.0",
+        "subscriptions-transport-ws": "^0.9.16"
     },
     "devDependencies": {
         "express-reload": "^1.2.0",

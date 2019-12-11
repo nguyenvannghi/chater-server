@@ -19,6 +19,10 @@ const MessageTypeDefs = gql`
     extend input Where {
         room: String
     }
+    extend type Subscription {
+        messageAdded: Message
+        messageUpdated: Message
+    }
 `;
 
 module.exports.MessageTypeDefs = MessageTypeDefs;

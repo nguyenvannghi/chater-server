@@ -13,7 +13,7 @@ module.exports.USER_RESOLVERS = {
         user: authenticated((root, args) => GET_USER_DETAIL(root, args)),
     },
     Mutation: {
-        addUser: authenticated((root, args) => {
+        addUser: authenticated((root, args, context) => {
             pubsub.publish(USER_ADDED, {
                 postAdded: args,
             });

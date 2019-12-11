@@ -10,7 +10,7 @@ const { schema } = require('./graphql');
 
 const app = express();
 const corsOptions = {
-    origin: 'http://localhost:5002/',
+    origin: '*',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true, // <-- REQUIRED backend setting
 };

@@ -27,10 +27,12 @@ const server = new ApolloServer({
     context: contextGuard,
     subscriptions: {
         keepAlive: 1000,
-        onConnect: async (connectionParams, websocket, context) => {
-            // Handling connection context here
+        onConnect: async (connectionParams, webSocket, context) => {
+            console.log(`🚀  Subscription client connected using Apollo server's built-in SubscriptionServer.`);
         },
-        onDisconnect: (websocket, context) => {},
+        onDisconnect: async (webSocket, context) => {
+            console.log(`🚀  Subscription client disconnected.`);
+        },
         path: '/subscriptions',
     },
 });
@@ -39,6 +41,6 @@ server.applyMiddleware({ app, path: '/', cors: corsOptions });
 const httpServer = http.createServer(app);
 server.installSubscriptionHandlers(httpServer);
 httpServer.listen(PORT, () => {
-    console.log(`🚀 Server ready at http://localhost:${PORT}${server.graphqlPath}`);
-    console.log(`🚀 Subscriptions ready at ws://localhost:${PORT}${server.subscriptionsPath}`);
+    console.log(`🚀  Server ready at http://localhost:${PORT}${server.graphqlPath}`);
+    console.log(`🚀  Subscriptions ready at ws://localhost:${PORT}${server.subscriptionsPath}`);
 });

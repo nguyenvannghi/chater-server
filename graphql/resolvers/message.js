@@ -1,11 +1,9 @@
 const { PubSub } = require('apollo-server-express');
-const { authenticated } = require('../../auth/authenticated-guard');
-const { GET_MESSAGES, GET_MESSAGE_DETAIL, CREATE_MESSAGE, UPDATE_MESSAGE } = require('../../services/message');
-
 const pubsub = new PubSub();
 
-const MESSAGE_ADDED = 'MESSAGE_ADDED';
-const MESSAGE_UPDATED = 'MESSAGE_UPDATED';
+const { authenticated } = require('../../auth/authenticated-guard');
+const { GET_MESSAGES, GET_MESSAGE_DETAIL, CREATE_MESSAGE, UPDATE_MESSAGE } = require('../../services/message');
+const { MESSAGE_ADDED, MESSAGE_UPDATED } = require('../const');
 
 module.exports.MESSAGE_RESOLVERS = {
     Query: {
@@ -13,24 +11,24 @@ module.exports.MESSAGE_RESOLVERS = {
         message: authenticated((root, args) => GET_MESSAGE_DETAIL(root, args)),
     },
     Mutation: {
-        addMessage: authenticated((root, args) => {
-            pubsub.publish(MESSAGE_ADDED, {
-                messageAdded: args,
-            });
-            return CREATE_MESSAGE(root, args);
+        addMessage: authenticated(async (root, args) => {
+            const message = await CREATE_MESSAGE(root, args);
+            await pubsub.publish(MESSAGE_ADDED, { [MESSAGE_ADDED]: message });
+            return message;
         }),
-        updateMessage: authenticated((root, args) => {
-            pubsub.publish(MESSAGE_UPDATED, {
-                messageUpdated: args,
+        updateMessage: authenticated(async (root, args) => {
+            const message = await UPDATE_MESSAGE(root, args);
+            await pubsub.publish(MESSAGE_UPDATED, {
+                [MESSAGE_UPDATED]: message,
             });
-            return UPDATE_MESSAGE(root, args);
+            return message;
         }),
     },
     Subscription: {
-        messageAdded: authenticated({
+        [MESSAGE_ADDED]: {
             subscribe: () => pubsub.asyncIterator([MESSAGE_ADDED]),
-        }),
-        messageUpdated: {
+        },
+        [MESSAGE_UPDATED]: {
             subscribe: () => pubsub.asyncIterator([MESSAGE_UPDATED]),
         },
     },

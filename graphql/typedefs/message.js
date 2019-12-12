@@ -1,12 +1,16 @@
 const { gql } = require('apollo-server-express');
 // Construct a schema, using GraphQL schema language
 const MessageTypeDefs = gql`
+    scalar Date
     type Message {
         _id: String!
         room: Room
         sender: User
         message_body: String
         message_status: Boolean
+        created_by: User
+        createdAt: Date
+        updatedAt: Date
     }
     extend type Query {
         messages(where: Where): [Message]

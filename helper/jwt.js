@@ -4,18 +4,9 @@ const CONSTANTS = require('../configs/const');
 
 const verifyToken = token => jwt.verify(token, SECRET_KEY);
 
-const generateToken = user =>
-    jwt.sign(
-        {
-            email: user.email,
-            username: user.username,
-        },
-        SECRET_KEY,
-        { expiresIn: EXPIRES_IN },
-    );
+const generateToken = user => jwt.sign(user, SECRET_KEY, { expiresIn: EXPIRES_IN });
 
 const isAuthorized = async (req, res, next) => {
-    console.log('isAuthorized', req);
     if (!req.body.isAuthorized) {
         const tokenFromClient = req.body.token || req.query.token || req.headers['x-access-token'];
         if (tokenFromClient) {

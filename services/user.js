@@ -66,8 +66,10 @@ const LOGIN = async (_root, { username, password }) => {
     }
     return {
         token: generateToken({
-            email: user.email,
+            _id: user._id,
             username: user.username,
+            email: user.email,
+            is_active: user.is_active,
         }),
         user: user,
     };
@@ -81,10 +83,7 @@ const REFRESH_TOKEN = async (_root, { token }) => {
     if (isEmpty(decodedToken)) {
         throw new Error(CONSTANTS.TOKEN_ERROR);
     }
-    return generateToken({
-        email: decodedToken.email,
-        username: decodedToken.username,
-    });
+    return generateToken({ decodedToken });
 };
 
 module.exports = {

@@ -8,12 +8,16 @@ const { PORT } = require('./configs');
 const { contextGuard } = require('./auth/context-guard');
 const { schema } = require('./graphql');
 
+let uploadAssetConfig = require('./services/asset-upload');
+
 const app = express();
 const corsOptions = {
     origin: '*',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true, // <-- REQUIRED backend setting
 };
+
+uploadAssetConfig.init(app);
 
 app.use(cors(corsOptions));
 app.use(bodyParser.urlencoded({ extended: true }));

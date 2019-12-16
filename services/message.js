@@ -1,4 +1,5 @@
 const { isEmpty } = require('lodash');
+const { ERROR_NAME } = require('../configs/const');
 const MessageModel = require('../db/message');
 
 const GET_MESSAGES = async (_root, args) => {
@@ -15,7 +16,7 @@ const GET_MESSAGE_DETAIL = async (_root, { _id }) => {
 
 const CREATE_MESSAGE = async (_root, { user_id, room_id, message_body, message_status, created_by }) => {
     if (isEmpty(user_id) || isEmpty(room_id)) {
-        throw new Error('REQUIRED_FIELD_MISSING');
+        throw new Error(ERROR_NAME.REQUIRED_FIELD_MISSING);
     }
 
     const temp = {
@@ -34,7 +35,7 @@ const CREATE_MESSAGE = async (_root, { user_id, room_id, message_body, message_s
 
 const UPDATE_MESSAGE = async (_root, { _id, message_body, message_status, updated_by }) => {
     if (isEmpty(_id)) {
-        throw new Error('REQUIRED_FIELD_MISSING');
+        throw new Error(ERROR_NAME.REQUIRED_FIELD_MISSING);
     }
     const temp = {
         message_body: message_body,

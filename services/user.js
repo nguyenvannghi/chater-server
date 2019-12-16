@@ -1,6 +1,6 @@
 const { isEmpty } = require('lodash');
 const UserModel = require('../db/user');
-const CONSTANTS = require('../configs/const');
+const { CONSTANTS, ERROR_NAME } = require('../configs/const');
 const { generateToken, verifyToken } = require('../helper/jwt');
 
 const GET_USERS = async (_root, _args) => {
@@ -13,7 +13,7 @@ const GET_USER_DETAIL = async (_root, { _id }) => {
 
 const CREATE_USER = async (_root, { username, email, password, is_active }) => {
     if (isEmpty(username) || isEmpty(email) || isEmpty(password)) {
-        throw new Error(CONSTANTS.REQUIRED_FIELD_MISSING);
+        throw new Error(ERROR_NAME.REQUIRED_FIELD_MISSING);
     }
     let isEmailExists = await UserModel.findOne({
         email: email,
@@ -22,7 +22,7 @@ const CREATE_USER = async (_root, { username, email, password, is_active }) => {
         username: username,
     });
     if (isEmailExists || isUsernameExists) {
-        throw new Error(CONSTANTS.ENTITY_ALREAY_EXISTS);
+        throw new Error(ERROR_NAME.ENTITY_ALREADY_EXISTS);
     }
 
     const temp = {
@@ -36,7 +36,7 @@ const CREATE_USER = async (_root, { username, email, password, is_active }) => {
 
 const UPDATE_USER = async (_root, { _id, password, is_active }) => {
     if (isEmpty(_id)) {
-        throw new Error(CONSTANTS.REQUIRED_FIELD_MISSING);
+        throw new Error(ERROR_NAME.REQUIRED_FIELD_MISSING);
     }
     const temp = {
         password: password,
@@ -55,14 +55,14 @@ const UPDATE_USER = async (_root, { _id, password, is_active }) => {
 
 const LOGIN = async (_root, { username, password }) => {
     if (isEmpty(username) || isEmpty(password)) {
-        throw new Error(CONSTANTS.REQUIRED_FIELD_MISSING);
+        throw new Error(ERROR_NAME.REQUIRED_FIELD_MISSING);
     }
     let user = await UserModel.findOne({ username: username });
     if (isEmpty(user)) {
-        throw new Error(CONSTANTS.USE_NOT_FOUND);
+        throw new Error(ERROR_NAME.USER_NOT_FOUND);
     }
     if (!user.comparePassword(password)) {
-        throw new Error(CONSTANTS.PASSWORD_INCORRECT);
+        throw new Error(ERROR_NAME.PASSWORD_INCORRECT);
     }
     return {
         token: generateToken({

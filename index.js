@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const { PORT } = require('./configs');
 const { contextGuard } = require('./auth/context-guard');
+const getErrorCode = require('./helper/format-error');
 const { schema } = require('./graphql');
 
 let uploadAssetConfig = require('./services/asset-upload');
@@ -29,6 +30,10 @@ const server = new ApolloServer({
     introspection: true,
     playground: true,
     context: contextGuard,
+    formatError: err => {
+        const error = getErrorCode(err.message);
+        return { message: error.message, statusCode: error.statusCode };
+    },
     subscriptions: {
         keepAlive: 1000,
         onConnect: async (connectionParams, webSocket, context) => {

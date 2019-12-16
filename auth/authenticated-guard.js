@@ -1,6 +1,6 @@
 const { isEmpty } = require('lodash');
 const { verifyToken } = require('../helper/jwt');
-const CONSTANTS = require('../configs/const');
+const { ERROR_NAME } = require('../configs/const');
 module.exports.authenticated = next => async (root, args, context, info) => {
     try {
         const token = context.authToken;
@@ -9,6 +9,6 @@ module.exports.authenticated = next => async (root, args, context, info) => {
             return next(root, args, context, info);
         }
     } catch (error) {
-        throw new Error(CONSTANTS.UNAUTHORIZED);
+        throw new Error(ERROR_NAME.UNAUTHORIZED);
     }
 };

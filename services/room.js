@@ -1,4 +1,5 @@
 const { isEmpty } = require('lodash');
+const { ERROR_NAME } = require('../configs/const');
 const RoomModel = require('../db/room');
 
 const GET_ROOMS = async (_root, args) => {
@@ -18,13 +19,13 @@ const GET_ROOM_DETAIL = async (_root, { _id }) => {
 
 const CREATE_ROOM = async (_root, { users, name, description, topic, image_url, created_by, is_private }) => {
     if (isEmpty(name)) {
-        throw new Error('REQUIRED_FIELD_MISSING');
+        throw new Error(ERROR_NAME.REQUIRED_FIELD_MISSING);
     }
     let isNameExists = await RoomModel.findOne({
         name: name,
     });
     if (isNameExists) {
-        throw new Error('ENTITY_ALREAY_EXISTS');
+        throw new Error(ERROR_NAME.ENTITY_ALREAY_EXISTS);
     }
 
     const temp = {
@@ -41,7 +42,7 @@ const CREATE_ROOM = async (_root, { users, name, description, topic, image_url, 
 
 const UPDATE_ROOM = async (_root, { _id, users, name, description, topic, image_url, updated_by, is_private }) => {
     if (isEmpty(_id)) {
-        throw new Error('REQUIRED_FIELD_MISSING');
+        throw new Error(ERROR_NAME.REQUIRED_FIELD_MISSING);
     }
     const temp = {
         users: users,

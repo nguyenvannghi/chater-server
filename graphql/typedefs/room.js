@@ -16,7 +16,7 @@ const RoomTypeDefs = gql`
         _id: String!
     }
     extend type Query {
-        rooms(where: Where): [Room]
+        rooms(where: JSON): [Room]
         room(_id: String!): Room
     }
     extend type Mutation {
@@ -39,9 +39,6 @@ const RoomTypeDefs = gql`
             updated_by: UserInput
             is_private: Boolean
         ): Room
-    }
-    extend input Where {
-        users: [String]
     }
 `;
 

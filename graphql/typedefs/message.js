@@ -1,7 +1,6 @@
 const { gql } = require('apollo-server-express');
 // Construct a schema, using GraphQL schema language
 const MessageTypeDefs = gql`
-    scalar Date
     type Message {
         _id: String!
         room: Room
@@ -13,15 +12,12 @@ const MessageTypeDefs = gql`
         updatedAt: Date
     }
     extend type Query {
-        messages(where: Where): [Message]
+        messages(where: JSON): [Message]
         message(_id: String!): Message
     }
     extend type Mutation {
         addMessage(user_id: UserInput!, room_id: RoomInput!, message_body: String, message_status: Boolean, created_by: UserInput): Message
         updateMessage(_id: String!, message_body: String, message_status: Boolean, updated_by: UserInput): Message
-    }
-    extend input Where {
-        room: String
     }
     extend type Subscription {
         messageAdded: Message

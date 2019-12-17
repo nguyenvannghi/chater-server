@@ -1,3 +1,4 @@
+const { GraphQLJSON } = require('graphql-type-json');
 const { PubSub } = require('apollo-server-express');
 const pubsub = new PubSub();
 
@@ -6,6 +7,7 @@ const { GET_MESSAGES, GET_MESSAGE_DETAIL, CREATE_MESSAGE, UPDATE_MESSAGE } = req
 const { MESSAGE_ADDED, MESSAGE_UPDATED } = require('../const');
 
 module.exports.MESSAGE_RESOLVERS = {
+    JSON: GraphQLJSON,
     Query: {
         messages: authenticated((root, args) => GET_MESSAGES(root, args)),
         message: authenticated((root, args) => GET_MESSAGE_DETAIL(root, args)),

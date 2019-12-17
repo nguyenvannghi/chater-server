@@ -1,5 +1,7 @@
 // extends
 const RootTypeDef = `
+  scalar Date
+  scalar JSON
   type Query {
     _typename: String
   } 

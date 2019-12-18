@@ -72,7 +72,7 @@ const LOGIN = async (_root, { username, password }) => {
             _id: user._id,
             username: user.username,
             email: user.email,
-            age: age,
+            age: user.age,
             is_active: user.is_active,
         }),
         user: user,

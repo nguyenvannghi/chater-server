@@ -5,6 +5,7 @@ const UserTypeDefs = gql`
         _id: String!
         username: String!
         email: String!
+        age: Int
         is_active: Boolean
     }
     input UserInput {
@@ -15,7 +16,7 @@ const UserTypeDefs = gql`
         user: User
     }
     extend type Query {
-        users: [User]
+        users(where: JSON): [User]
         user(_id: String!): User
     }
     extend type Mutation {

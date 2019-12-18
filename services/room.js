@@ -1,9 +1,11 @@
 const { isEmpty } = require('lodash');
+const { getLogicalQueryOperators } = require('../helper/mongo-format-operator');
 const { ERROR_NAME } = require('../configs/const');
 const RoomModel = require('../db/room');
 
 const GET_ROOMS = async (_root, args) => {
-    return await RoomModel.find(args.where)
+    const params = getLogicalQueryOperators(args.where);
+    return await RoomModel.find(params)
         .populate('users')
         .populate('created_by')
         .populate('updated_by')

@@ -1,9 +1,11 @@
 const { isEmpty } = require('lodash');
+const { getLogicalQueryOperators } = require('../helper/mongo-format-operator');
 const { ERROR_NAME } = require('../configs/const');
 const MessageModel = require('../db/message');
 
 const GET_MESSAGES = async (_root, args) => {
-    return await MessageModel.find(args.where)
+    const params = getLogicalQueryOperators(args.where);
+    return await MessageModel.find(params)
         .populate([{ path: 'sender' }, { path: 'room' }, { path: 'created_by' }, { path: 'updated_by' }])
         .catch(err => new Error(err));
 };

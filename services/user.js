@@ -2,16 +2,18 @@ const { isEmpty } = require('lodash');
 const UserModel = require('../db/user');
 const { CONSTANTS, ERROR_NAME } = require('../configs/const');
 const { generateToken, verifyToken } = require('../helper/jwt');
+const { getLogicalQueryOperators } = require('../helper/mongo-format-operator');
 
-const GET_USERS = async (_root, _args) => {
-    return await UserModel.find().catch(err => new Error(err));
+const GET_USERS = async (_root, args) => {
+    const params = getLogicalQueryOperators(args.where);
+    return await UserModel.find(params).catch(err => new Error(err));
 };
 
 const GET_USER_DETAIL = async (_root, { _id }) => {
     return await UserModel.findById(_id).catch(err => new Error(err));
 };
 
-const CREATE_USER = async (_root, { username, email, password, is_active }) => {
+const CREATE_USER = async (_root, { username, email, password, age, is_active }) => {
     if (isEmpty(username) || isEmpty(email) || isEmpty(password)) {
         throw new Error(ERROR_NAME.REQUIRED_FIELD_MISSING);
     }
@@ -29,6 +31,7 @@ const CREATE_USER = async (_root, { username, email, password, is_active }) => {
         username: username,
         email: email,
         password: password,
+        age: age,
         is_active: is_active,
     };
     return await UserModel.create(temp).catch(err => new Error(err));
@@ -69,6 +72,7 @@ const LOGIN = async (_root, { username, password }) => {
             _id: user._id,
             username: user.username,
             email: user.email,
+            age: age,
             is_active: user.is_active,
         }),
         user: user,

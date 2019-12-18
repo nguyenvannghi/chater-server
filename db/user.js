@@ -16,6 +16,7 @@ const User = new Schema(
             unique: true,
             required: [true, 'email is required'],
         },
+        age: Number,
         password: { type: String, require: [true, 'password is required'] },
         is_active: { type: Boolean, default: false },
     },

@@ -42,7 +42,11 @@ const CREATE_ROOM = async (_root, { users, owners, name, description, topic, ima
         created_by: created_by,
         is_private: is_private ? is_private : false,
     };
-    return await RoomModel.create(temp).catch(err => new Error(err));
+    let room = await RoomModel.create(temp);
+    return await room
+        .populate([{ path: 'users' }, { path: 'owners' }, { path: 'created_by' }, { path: 'updated_by' }])
+        .execPopulate()
+        .catch(err => new Error(err));
 };
 
 const UPDATE_ROOM = async (_root, args) => {
@@ -50,7 +54,7 @@ const UPDATE_ROOM = async (_root, args) => {
     if (isEmpty(_id)) {
         throw new Error(ERROR_NAME.REQUIRED_FIELD_MISSING);
     }
-    return await RoomModel.findByIdAndUpdate(
+    let room = await RoomModel.findByIdAndUpdate(
         _id,
         {
             $set: args,
@@ -58,7 +62,11 @@ const UPDATE_ROOM = async (_root, args) => {
         {
             new: true,
         },
-    ).catch(err => new Error(err));
+    );
+    return await room
+        .populate([{ path: 'users' }, { path: 'owners' }, { path: 'created_by' }, { path: 'updated_by' }])
+        .execPopulate()
+        .catch(err => new Error(err));
 };
 
 module.exports = {

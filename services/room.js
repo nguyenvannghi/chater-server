@@ -7,6 +7,7 @@ const GET_ROOMS = async (_root, args) => {
     const params = getLogicalQueryOperators(args.where);
     return await RoomModel.find(params)
         .populate('users')
+        .populate('owners')
         .populate('created_by')
         .populate('updated_by')
         .catch(err => new Error(err));
@@ -14,12 +15,13 @@ const GET_ROOMS = async (_root, args) => {
 const GET_ROOM_DETAIL = async (_root, { _id }) => {
     return await RoomModel.findById(_id)
         .populate('users')
+        .populate('owners')
         .populate('created_by')
         .populate('updated_by')
         .catch(err => new Error(err));
 };
 
-const CREATE_ROOM = async (_root, { users, name, description, topic, image_url, created_by, is_private }) => {
+const CREATE_ROOM = async (_root, { users, owners, name, description, topic, image_url, created_by, is_private }) => {
     if (isEmpty(name)) {
         throw new Error(ERROR_NAME.REQUIRED_FIELD_MISSING);
     }
@@ -32,33 +34,26 @@ const CREATE_ROOM = async (_root, { users, name, description, topic, image_url, 
 
     const temp = {
         users: users,
+        owners: owners,
         name: name,
-        description: description,
-        topic: topic,
-        image_url: image_url,
+        description: description ? description : '',
+        topic: topic ? topic : '',
+        image_url: image_url ? image_url : '',
         created_by: created_by,
-        is_private: is_private,
+        is_private: is_private ? is_private : false,
     };
     return await RoomModel.create(temp).catch(err => new Error(err));
 };
 
-const UPDATE_ROOM = async (_root, { _id, users, name, description, topic, image_url, updated_by, is_private }) => {
+const UPDATE_ROOM = async (_root, args) => {
+    const { _id } = args;
     if (isEmpty(_id)) {
         throw new Error(ERROR_NAME.REQUIRED_FIELD_MISSING);
     }
-    const temp = {
-        users: users,
-        name: name,
-        description: description,
-        topic: topic,
-        image_url: image_url,
-        updated_by: updated_by,
-        is_private: is_private,
-    };
     return await RoomModel.findByIdAndUpdate(
         _id,
         {
-            $set: temp,
+            $set: args,
         },
         {
             new: true,

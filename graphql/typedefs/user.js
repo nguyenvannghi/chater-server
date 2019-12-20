@@ -20,8 +20,8 @@ const UserTypeDefs = gql`
         user(_id: String!): User
     }
     extend type Mutation {
-        addUser(username: String!, email: String!, password: String!, is_active: Boolean): User
-        updateUser(_id: String!, password: String!, is_active: Boolean): User
+        addUser(username: String!, email: String!, password: String!, age: Int, is_active: Boolean): User
+        updateUser(_id: String!, password: String, age: Int, is_active: Boolean): User
         login(username: String!, password: String!): AuthPayLoad!
         refreshToken(token: String!): String!
     }

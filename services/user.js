@@ -13,7 +13,8 @@ const GET_USER_DETAIL = async (_root, { _id }) => {
     return await UserModel.findById(_id).catch(err => new Error(err));
 };
 
-const CREATE_USER = async (_root, { username, email, password, age, is_active }) => {
+const CREATE_USER = async (_root, args) => {
+    const { username, email, password } = args;
     if (isEmpty(username) || isEmpty(email) || isEmpty(password)) {
         throw new Error(ERROR_NAME.REQUIRED_FIELD_MISSING);
     }
@@ -26,29 +27,18 @@ const CREATE_USER = async (_root, { username, email, password, age, is_active })
     if (isEmailExists || isUsernameExists) {
         throw new Error(ERROR_NAME.ENTITY_ALREADY_EXISTS);
     }
-
-    const temp = {
-        username: username,
-        email: email,
-        password: password,
-        age: age,
-        is_active: is_active,
-    };
-    return await UserModel.create(temp).catch(err => new Error(err));
+    return await UserModel.create(args).catch(err => new Error(err));
 };
 
-const UPDATE_USER = async (_root, { _id, password, is_active }) => {
+const UPDATE_USER = async (_root, args) => {
+    const { _id } = args;
     if (isEmpty(_id)) {
         throw new Error(ERROR_NAME.REQUIRED_FIELD_MISSING);
     }
-    const temp = {
-        password: password,
-        is_active: is_active,
-    };
     return await UserModel.findByIdAndUpdate(
         _id,
         {
-            $set: temp,
+            $set: args,
         },
         {
             new: true,

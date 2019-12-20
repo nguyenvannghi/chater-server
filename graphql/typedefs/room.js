@@ -4,6 +4,7 @@ const RoomTypeDefs = gql`
     type Room {
         _id: String!
         users: [User]
+        owners: [User]
         name: String!
         description: String
         topic: String
@@ -22,6 +23,7 @@ const RoomTypeDefs = gql`
     extend type Mutation {
         addRoom(
             users: [UserInput]
+            owners: [UserInput]
             name: String!
             description: String
             topic: String
@@ -32,7 +34,8 @@ const RoomTypeDefs = gql`
         updateRoom(
             _id: String!
             users: [UserInput]
-            name: String!
+            owners: [UserInput]
+            name: String
             description: String
             topic: String
             image_url: String

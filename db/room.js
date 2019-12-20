@@ -11,6 +11,12 @@ const Room = new Schema(
                 ref: User,
             },
         ],
+        owners: [
+            {
+                type: ObjectId,
+                ref: User,
+            },
+        ],
         name: {
             type: String,
             maxlength: 225,

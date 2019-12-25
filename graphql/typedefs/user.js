@@ -8,7 +8,7 @@ const UserTypeDefs = gql`
         age: Int
         is_active: Boolean
     }
-    input UserInput {
+    input IdInput {
         _id: String!
     }
     type AuthPayLoad {

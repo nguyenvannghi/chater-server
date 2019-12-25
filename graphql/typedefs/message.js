@@ -16,8 +16,8 @@ const MessageTypeDefs = gql`
         message(_id: String!): Message
     }
     extend type Mutation {
-        addMessage(user_id: UserInput!, room_id: RoomInput!, message_body: String, message_status: Boolean, created_by: UserInput): Message
-        updateMessage(_id: String!, message_body: String, message_status: Boolean, updated_by: UserInput): Message
+        addMessage(user_id: IdInput!, room_id: IdInput!, message_body: String, message_status: Boolean, created_by: IdInput): Message
+        updateMessage(_id: String!, message_body: String, message_status: Boolean, updated_by: IdInput): Message
     }
     extend type Subscription {
         messageAdded: Message

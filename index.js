@@ -31,6 +31,7 @@ const server = new ApolloServer({
     playground: true,
     context: contextGuard,
     formatError: err => {
+        console.log(err);
         const error = getErrorCode(err.message);
         return { message: error.message, statusCode: error.statusCode };
     },
